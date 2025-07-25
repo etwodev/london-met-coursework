@@ -1,3 +1,4 @@
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -43,7 +44,7 @@ public class BankApp {
 
   private static void manageAccountsMenu() {
     while (true) {
-      System.out.println("\n=== Manage Accounts ===");
+      System.out.println("=== Manage Accounts ===");
       System.out.println("1. Create Account");
       System.out.println("2. Deposit");
       System.out.println("3. Withdraw");
@@ -81,9 +82,41 @@ public class BankApp {
           closeAccount();
           break;
         case 7:
+          getAccountDetails();
+          break;
+        case 8:
           return;
         default:
           System.out.println("Invalid option. Please try again.");
+      }
+    }
+  }
+
+  private static void getAccountDetails() {
+    System.out.print("Enter account ID: ");
+    int accountId;
+    try {
+      accountId = Integer.parseInt(scanner.nextLine());
+    } catch (NumberFormatException e) {
+      System.out.println("Invalid account ID.");
+      return;
+    }
+
+    BankAccount account = bank.getAccount(accountId);
+    if (account == null) {
+      System.out.println("Account not found.");
+      return;
+    }
+
+    System.out.println("Account Details:");
+    System.out.println(account);
+    List<Transaction> transactions = account.getTransactions();
+    if (transactions.isEmpty()) {
+      System.out.println("No transactions found for this account.");
+    } else {
+      System.out.println("Transactions:");
+      for (Transaction t : transactions) {
+        System.out.println(t);
       }
     }
   }
@@ -197,7 +230,10 @@ public class BankApp {
       System.out.println("No transactions found.");
       return;
     }
-    System.out.println("Transactions:");
+
+    transactions.sort(Comparator.comparingDouble(t -> t.getAmount()));
+
+    System.out.println("Transactions sorted by amount:");
     for (Transaction t : transactions) {
       System.out.println(t);
     }
