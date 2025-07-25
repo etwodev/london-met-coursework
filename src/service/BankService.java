@@ -71,7 +71,7 @@ public class BankService {
 
   public <T, K extends Comparable<K>> T binarySearch(List<T> list, K target, Function<T, K> keyExtractor) {
     list.sort(Comparator.comparing(keyExtractor));
-    int left = 0, right = list.size() - 1;
+     int left = 0, right = list.size() - 1;
     while (left <= right) {
       int mid = left + (right - left) / 2;
       K midValue = keyExtractor.apply(list.get(mid));

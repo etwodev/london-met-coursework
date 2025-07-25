@@ -1,7 +1,7 @@
-src/BankApp.java
 src/model/BankAccount.java
 src/model/Transaction.java
-src/model/TransactionType.java
 src/model/TransactionQueue.java
+src/model/TransactionType.java
 src/service/BankService.java
 src/service/CommandService.java
+src/BankApp.java

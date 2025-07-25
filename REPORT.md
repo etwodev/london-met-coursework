@@ -14,6 +14,8 @@ To load the project into NetBeans:
 8. Add the `src` directory as the **Source Package Folder**
 9. Set the **Main Class** to `src/BankApp.java`
 
+Alternatively, if you are on linux and have java and javac installed, simply run the `run.sh` script I made.
+
 ---
 
 ## Architecture
