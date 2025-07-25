@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
@@ -112,11 +113,13 @@ public class BankApp {
     System.out.println("Account Details:");
     System.out.println(account);
     List<Transaction> transactions = account.getTransactions();
+    List<Transaction> all = new ArrayList<>(transactions);
+    all.sort(Comparator.comparingDouble(t -> t.getAmount()));
     if (transactions.isEmpty()) {
       System.out.println("No transactions found for this account.");
     } else {
       System.out.println("Transactions:");
-      for (Transaction t : transactions) {
+      for (Transaction t : all) {
         System.out.println(t);
       }
     }
