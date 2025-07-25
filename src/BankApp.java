@@ -48,7 +48,9 @@ public class BankApp {
       System.out.println("2. Deposit");
       System.out.println("3. Withdraw");
       System.out.println("4. Send Money");
-      System.out.println("5. Back to Main Menu");
+      System.out.println("5. List Accounts");
+      System.out.println("6. Close Account");
+      System.out.println("7. Back to Main Menu");
       System.out.print("Choose an option: ");
 
       int choice;
@@ -73,6 +75,12 @@ public class BankApp {
           sendMoney();
           break;
         case 5:
+          listAccounts();
+          break;
+        case 6:
+          closeAccount();
+          break;
+        case 7:
           return;
         default:
           System.out.println("Invalid option. Please try again.");
@@ -88,6 +96,36 @@ public class BankApp {
 
     BankAccount account = bank.createAccount(name, address);
     System.out.println("Account created successfully: \n" + account);
+  }
+
+  private static void listAccounts() {
+    List<BankAccount> accounts = bank.listAccounts();
+    if (accounts.isEmpty()) {
+      System.out.println("No accounts found.");
+      return;
+    }
+    System.out.println("Existing Accounts:");
+    for (BankAccount acc : accounts) {
+      System.out.println(acc);
+    }
+  }
+
+  private static void closeAccount() {
+    System.out.print("Enter account ID to close: ");
+    int accountId;
+    try {
+      accountId = Integer.parseInt(scanner.nextLine());
+    } catch (NumberFormatException e) {
+      System.out.println("Invalid account ID.");
+      return;
+    }
+
+    boolean success = bank.closeAccount(accountId);
+    if (success) {
+      System.out.println("Account " + accountId + " closed successfully.");
+    } else {
+      System.out.println("Failed to close account. Ensure the account exists and balance is zero.");
+    }
   }
 
   private static void deposit() {

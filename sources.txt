@@ -4,4 +4,3 @@ src/model/Transaction.java
 src/model/TransactionType.java
 src/model/TransactionQueue.java
 src/service/BankService.java
-src/utils/TransactionSorter.java

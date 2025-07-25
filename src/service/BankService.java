@@ -33,6 +33,19 @@ public class BankService {
     return false;
   }
 
+  public List<BankAccount> listAccounts() {
+    return new ArrayList<>(accounts);
+  }
+
+  public boolean closeAccount(int accountId) {
+    BankAccount account = findAccount(accountId);
+    if (account != null && account.getBalance() == 0) {
+      accounts.remove(account);
+      return true;
+    }
+    return false;
+  }
+
   public boolean send(int fromAccountId, int toAccountId, double amount) {
     BankAccount from = findAccount(fromAccountId);
     BankAccount to = findAccount(toAccountId);
