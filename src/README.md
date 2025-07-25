@@ -1,309 +1,198 @@
-# Banking Application – Final Report
+# CS4001 – Final Report
 
-## Instructions
-
-To load the project into NetBeans:
-
-1. Open NetBeans
-2. Navigate to: **File > New Project**
-3. Select: **Java > Java with Ant > Java Project with Existing Sources**
-4. Click **Next**
-5. Name the project appropriately
-6. Set the **Project Location** to the root folder containing `.gitignore`
-7. Click **Next**
-8. Add the `src` directory as the **Source Package Folder**
-9. Set the **Main Class** to `src/BankApp.java`
-
----
+https://github.com/etwodev/london-met-coursework
 
 ## Architecture
 
 ### Class Diagram
 
-> All classes and code in this project were developed independently. No third-party code or textbook implementations were used beyond standard Java libraries.
-
 ```mermaid
 classDiagram
-  class BankApp {
-    -Scanner scanner
-    +main(String[]): void
-    -manageAccountsMenu(): void
-    -viewTransactionsMenu(): void
-  }
+    class StaffHire {
+        -int vacancyNumber
+        -String designation
+        -String jobType
+        -String staffName
+        -String joiningDate
+        -String qualification
+        -String appointedBy
+        -boolean joined
+        +getVacancyNumber(): int
+        +getDesignation(): String
+        +getJobType(): String
+        +getStaffName(): String
+        +getJoiningDate(): String
+        +getQualification(): String
+        +getAppointedBy(): String
+        +isJoined(): boolean
+        +setStaffName(String)
+        +setJoiningDate(String)
+        +setQualification(String)
+        +setAppointedBy(String)
+        +setJoined(boolean)
+        +display(): void
+    }
 
-  class CommandService {
-    -BankService bank
-    -Scanner scanner
-    -getStrInput(String): String
-    -getIntInput(String): Integer
-    -getDoubleInput(String): Double
-    +create(): void
-    +deposit(): void
-    +withdraw(): void
-    +send(): void
-    +listAccounts(): void
-    +close(): void
-    +account(): void
-    +listTransactions(): void
-    +searchTransactions(): void
-  }
+    class FullTimeStaffHire {
+        -double salary
+        -int weeklyFractionalHours
+        +getSalary(): double
+        +getWeeklyFractionalHours(): int
+        +setSalary(double): void
+        +setWeeklyFractionalHours(int): void
+        +display(): void
+    }
 
-  class BankService {
-    -List~BankAccount~ accounts
-    -int nextAccountId
-    +createAccount(String, String): BankAccount
-    +deposit(int, double): boolean
-    +withdraw(int, double): boolean
-    +listAccounts(): List~BankAccount~
-    +closeAccount(int): boolean
-    +send(int, int, double): boolean
-    +getAllTransactions(): List~Transaction~
-    +binarySearch(List~T~, K, Function): T
-    +getAccount(int): BankAccount
-  }
+    class PartTimeStaffHire {
+        -int workingHour
+        -double wagesPerHour
+        -String shifts
+        -boolean terminated
+        +getWorkingHour(): int
+        +getWagesPerHour(): double
+        +getShifts(): String
+        +isTerminated(): boolean
+        +setShifts(String): void
+        +terminateStaff(): void
+        +display(): void
+    }
 
-  class BankAccount {
-    -int accoundId
-    -String holderName
-    -String holderAddress
-    -Date openingDate
-    -double balance
-    -TransactionQueue transactions
-    +deposit(double): boolean
-    +withdraw(double): boolean
-    +addTransaction(Transaction): void
-    +getBalance(): double
-    +getAccountId(): int
-    +getHolderName(): String
-    +getHolderAddress(): String
-    +getOpeningDate(): Date
-    +getTransactions(): List~Transaction~
-  }
+    class RecruitmentSystem {
+        -ArrayList~StaffHire~ staffList
+        +main(String[]): void
+    }
 
-  class Transaction {
-    -TransactionType type
-    -float amount
-    -Date date
-    -Integer fromAccountId
-    -Integer toAccountId
-    +getAmount(): float
-    +getFromAccountId(): Integer
-    +getToAccountId(): Integer
-    +getType(): TransactionType
-    +getDate(): Date
-  }
-
-  class TransactionQueue {
-    -int capacity
-    -List~Transaction~ transactions
-    +enqueue(Transaction): void
-    +getAll(): List~Transaction~
-    +size(): int
-    +isEmpty(): boolean
-  }
-
-  class TransactionType {
-    <<enum>>
-    WITHDRAW
-    DEPOSIT
-    SEND
-    REQUEST
-    RECEIVE
-    +getValue(): String
-    +fromString(String): TransactionType
-  }
-
-  BankApp --> CommandService
-  CommandService --> BankService
-  BankService --> BankAccount
-  BankAccount --> TransactionQueue
-  BankAccount --> Transaction
-  TransactionQueue --> Transaction
-  Transaction --> TransactionType
+    FullTimeStaffHire --|> StaffHire
+    PartTimeStaffHire --|> StaffHire
 ```
 
 ---
 
 ## Classes and Their Responsibilities
 
-### 1. `BankApp`
+---
+
+### **1. StaffHire**
 
 **Purpose:**
-Serves as the main entry point of the application.
+Acts as the abstract or base class representing a general staff hire entry, holding common attributes shared between full-time and part-time staff.
 
 **Key Properties:**
 
-* `Scanner scanner` – For collecting CLI user input
+* `int vacancyNumber` – Unique identifier for the staff vacancy
+* `String designation` – The job title or designation of the vacancy
+* `String jobType` – Type of job: Permanent, Temporary, or Contract
+* `String staffName` – Name of the staff hired
+* `String joiningDate` – Date on which the staff joined
+* `String qualification` – Educational qualification of the staff
+* `String appointedBy` – Name of the person who appointed the staff
+* `boolean joined` – Indicates whether the staff has joined or not
 
 **Key Methods:**
 
-* `main(String[] args)` – Initializes and launches the CLI
-* `manageAccountsMenu()` – Manages the account-related CLI options
-* `viewTransactionsMenu()` – Manages the transaction-related CLI options
+* `getters/setters` – Standard accessor and mutator methods for all fields
+* `setJoined(boolean)` – Allows updating the joined status
+* `display()` – Outputs staff hire details (base class version)
 
 ---
 
-### 2. `CommandService`
+### **2. FullTimeStaffHire**
 
 **Purpose:**
-Acts as the command handler for CLI inputs and delegates business logic to the `BankService`.
+Represents a full-time staff member and extends the `StaffHire` class by adding salary and working hours.
 
 **Key Properties:**
 
-* `BankService bank` – Central logic handler
-* `Scanner scanner` – For user input
+* `double salary` – Annual salary for the staff member
+* `int weeklyFractionalHours` – Number of hours worked per week
 
-**Helper Methods:**
+**Key Methods:**
 
-* `getStrInput(String message)` – Accepts string input from the user
-* `getIntInput(String message)` – Accepts integer input
-* `getDoubleInput(String message)` – Accepts double input
-
-**Command Methods:**
-
-* `create()` – Creates a new bank account
-* `deposit()` – Deposits funds into an account
-* `withdraw()` – Withdraws funds from an account
-* `send()` – Transfers funds between accounts
-* `listAccounts()` – Displays all accounts
-* `close()` – Closes an account with a zero balance
-* `account()` – Displays account details
-* `listTransactions()` – Lists all transactions
-* `searchTransactions()` – Searches transactions by amount
+* `getSalary()` / `setSalary(double)` – Accesses or updates the salary. Updates only if staff has joined
+* `getWeeklyFractionalHours()` / `setWeeklyFractionalHours(int)` – Accesses or updates working hours
+* `display()` – Outputs full-time staff details, including base class and subclass-specific attributes
 
 ---
 
-### 3. `BankService`
+### **3. PartTimeStaffHire**
 
 **Purpose:**
-Data management class for accounts and transactions.
+Represents a part-time staff member and extends the `StaffHire` class with shift, wages, working hours, and termination details.
 
 **Key Properties:**
 
-* `List<BankAccount> accounts` – Stores active accounts
-* `int nextAccountId` – Tracks the next account ID
+* `int workingHour` – Number of hours worked per day
+* `double wagesPerHour` – Wage earned per hour
+* `String shifts` – Assigned work shift (e.g., Morning, Day, Evening)
+* `boolean terminated` – Indicates if the staff member has been terminated
 
 **Key Methods:**
 
-* `createAccount(...)`
-* `deposit(...)`
-* `withdraw(...)`
-* `closeAccount(...)`
-* `send(...)`
-* `listAccounts()`
-* `getAllTransactions()`
-* `binarySearch(...)` – Searches transactions by amount
-* `getAccount(...)` – Retrieves account by ID
+* `getters/setters` – Standard accessors and mutators for new fields
+* `setShifts(String)` – Updates working shifts if the staff has joined
+* `terminateStaff()` – Marks the staff as terminated and clears relevant personal details
+* `display()` – Outputs part-time staff details and calculates income per day
 
 ---
 
-### 4. `BankAccount`
+### **4. RecruitmentSystem**
 
 **Purpose:**
-Represents an individual bank account and its associated transactions.
+Serves as the graphical user interface (GUI) controller and main entry point of the application.
 
 **Key Properties:**
 
-* `int accountId`
-* `String holderName`
-* `String holderAddress`
-* `Date openingDate`
-* `double balance`
-* `TransactionQueue transactions`
+* `ArrayList<StaffHire> staffList` – Stores all staff hire objects
+* `GUI components` – Includes text fields, labels, buttons for all relevant inputs and actions
 
 **Key Methods:**
 
-* `deposit(...)`
-* `withdraw(...)`
-* `addTransaction(...)`
-* `getTransactions()`
-* Standard getters
+* `main(String[] args)` – Launches the GUI
+* `addFullTimeStaff()` – Creates and adds a full-time staff member based on user input
+* `addPartTimeStaff()` – Creates and adds a part-time staff member based on user input
+* `setSalaryForFullTime()` – Sets salary for a full-time staff member by vacancy number
+* `setShiftForPartTime()` – Updates shifts for a part-time staff member by vacancy number
+* `terminatePartTimeStaff()` – Terminates a part-time staff member by vacancy number
+* `displayStaffDetails()` – Displays all details of a selected staff member
+* `clearFields()` – Resets all text fields in the GUI for fresh input
 
 ---
 
-### 5. `Transaction`
-
-**Purpose:**
-Stores the details of a single transaction.
-
-**Key Properties:**
-
-* `TransactionType type`
-* `float amount`
-* `Date date`
-* `Integer fromAccountId`
-* `Integer toAccountId`
-
-**Key Methods:**
-
-* `toString()` – String representation of the transaction
-* Standard getters
+Certainly. Below is a modified version of the **Data Structures Used**, **Algorithms Implemented**, and **Reflection** sections tailored specifically for your **Recruitment System** Java project:
 
 ---
 
-### 6. `TransactionQueue`
+## **Data Structures Used**
 
-**Purpose:**
-A custom fixed-size FIFO queue to store recent transactions for each account.
-
-**Key Properties:**
-
-* `int capacity`
-* `List<Transaction> transactions`
-
-**Key Methods:**
-
-* `enqueue(Transaction)`
-* `getAll()`
-* `size()`
-* `isEmpty()`
+| Data Structure         | Location(s)                              | Purpose                                                                |
+| ---------------------- | ---------------------------------------- | ---------------------------------------------------------------------- |
+| `ArrayList<StaffHire>` | `RecruitmentSystem`                      | Store and manage all staff entries (full-time and part-time)           |
+| `String`               | All classes                              | Store textual attributes like designation, job type, and staff details |
+| `boolean`              | `StaffHire`, `PartTimeStaffHire`         | Track joined and termination status of staff                           |
+| `int`, `double`        | `FullTimeStaffHire`, `PartTimeStaffHire` | Represent numeric fields such as salary, wages, and working hours      |
 
 ---
 
-### 7. `TransactionType`
+## **Algorithms Implemented**
 
-**Purpose:**
-An enumeration of all valid transaction types.
-
-**Enum Constants:**
-
-* `WITHDRAW`, `DEPOSIT`, `SEND`, `REQUEST`, `RECEIVE`
-
-**Key Methods:**
-
-* `getValue()` – Returns string name
-* `fromString(String)` – Parses string to enum
-* `toString()` – Returns display name
-
----
-
-## Data Structures Used
-
-| Data Structure             | Location(s)            | Purpose                                    |
-| -------------------------- | ---------------------- | ------------------------------------------ |
-| `List<BankAccount>`        | `BankService`          | Store and manage bank accounts             |
-| `List<Transaction>`        | `BankAccount`, `Queue` | Record transactions                        |
-| `TransactionQueue`         | `BankAccount`          | Maintain a limited history of transactions |
-| `Enum` (`TransactionType`) | `Transaction`          | Classify transaction types safely          |
-
----
-
-## Algorithms Implemented
-
-### 1. **Binary Search**
+### 1. **Linear Search**
 
 **Location:**
 
-* `BankService.binarySearch(...)`
+* `RecruitmentSystem` methods (e.g., `setSalaryForFullTime`, `setShiftForPartTime`, `terminatePartTimeStaff`)
 
 **Use Case:**
-Efficiently search for a transaction by amount within a sorted transaction list.
+Find a staff object by matching the vacancy number within the `ArrayList<StaffHire>`.
 
 **Justification:**
-Binary search provides logarithmic search performance when the data is pre-sorted, which is ideal for improving lookup speed in potentially large transaction lists.
+Since the number of vacancies is relatively small, a linear search is acceptable and keeps implementation simple. For larger datasets, this could be optimized using a `Map<Integer, StaffHire>` or a more advanced index structure.
 
 ---
 
-## Reflection
+## **Reflection**
 
-The most challenging aspect of this project was managing scope. It was easy to fall into the trap of adding unnecessary features or over-engineering components just for the sake of readability. Recognizing when to stop and solidify what was already built was a key learning moment. I also believe I could improve my code by implementing custom error handling through Generic errors. This way I can throw errors in my BankService class and use a switch statement on the errors in my CommandService class to give more context to the user besides just "Transaction Failed.". Currently the implementation does not give much feedback as to why a command failed. Beyond this, I learnt a decent amount Java facts that I would like to implement more of in the future when programming (Such as the fact that Java has Ternary Operators).
+The hardest aspect of this project was designing the class hierarchy to be flexible. Ensuring that common properties were encapsulated in the base class (`StaffHire`).
+
+Another complexity was the GUI development using Swing. I opted to encapsulate much of the logic behind action listeners to keep the UI code as readable as possible.
+
+There is room for improvement in terms of exception handling and form input validation. Currently, the application uses simple `try-catch` blocks and message dialogs.
