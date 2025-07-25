@@ -51,7 +51,8 @@ public class BankApp {
       System.out.println("4. Send Money");
       System.out.println("5. List Accounts");
       System.out.println("6. Close Account");
-      System.out.println("7. Back to Main Menu");
+      System.out.println("7. List account details");
+      System.out.println("8. Back to Main Menu");
       System.out.print("Choose an option: ");
 
       int choice;
