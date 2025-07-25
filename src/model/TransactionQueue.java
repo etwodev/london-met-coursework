@@ -4,22 +4,22 @@ import java.util.*;
 
 public class TransactionQueue {
   private final int capacity;
-  private LinkedList<Transaction> transactions;
+  private final List<Transaction> transactions;
 
   public TransactionQueue(int capacity) {
     this.capacity = capacity;
-    this.transactions = new LinkedList<Transaction>();
+    this.transactions = new ArrayList<>();
   }
 
   public void enqueue(Transaction t) {
     if (transactions.size() == capacity) {
-      transactions.removeLast();
+      transactions.remove(transactions.size() - 1);
     }
-    transactions.addFirst(t);
+    transactions.add(0, t);
   }
 
   public List<Transaction> getAll() {
-    return new LinkedList<Transaction>(transactions);
+    return new ArrayList<>(transactions);
   }
 
   public int size() {
